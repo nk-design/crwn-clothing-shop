@@ -2,14 +2,17 @@ import {Outlet} from "react-router-dom";
 import {Fragment, useContext} from "react";
 import {ReactComponent as Logo} from "../../assets/crown.svg";
 import {NavLink,NavLinks,NavigationContainer,LogoContainer} from "./navigation.styles";
-import { UserContext } from "../../contexts/user.context";
 import { CartContext } from "../../contexts/cart.context";
 import {signOutUser} from "../../utils/firebase.utils";
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
+import {useSelector} from "react-redux"
 
 const Navigation = () =>{
-    const {currentUser} = useContext(UserContext);
+    const currentUser = useSelector((state)=> {
+      console.log(state)
+      return state.user.currentUser
+    })
     const {isCartOpen} = useContext(CartContext)
 
   return (
@@ -22,7 +25,7 @@ const Navigation = () =>{
             <NavLink to="/shop">
                 SHOP
             </NavLink>
-            {currentUser?(<span onClick={signOutUser}>Sign Out</span>):(<NavLink to="/sign-in">Sign in</NavLink>)}
+            {currentUser?(<NavLink onClick={signOutUser}>Sign Out</NavLink>):(<NavLink to="/sign-in">Sign in</NavLink>)}
             <CartIcon />
         </NavLinks>
         {isCartOpen && <CartDropdown/>}
